@@ -1,0 +1,17 @@
+@layout('base')
+
+@section('content')
+<a class="btn btn-danger mb-2" href="{{route('clear_cart') }}">Clear</a>
+<ul>
+  @each(cartItem in cart)
+  <li class="mb-4">
+  <form method="POST" action='{{route('update_cart_quantity', {book_id:cartItem.id} ) }}'>
+     {{csrfField()}}
+     {{cartItem.title}}: ${{cartItem.price/100}} x
+     <input style="width:25px" type="text" value="{{cartItem.qty}}" name="newQty"/> = ${{cartItem.price*cartItem.qty/100}}
+     <input type="submit" class="btn btn-primary btn-sm" value="Update Quantity"/><a href="{{ route('remove_from_cart', {book_id:cartItem.id})}}" class="btn btn-danger btn-sm">x</a>
+    </form>
+</li>
+  @endeach
+</ul>
+@endsection

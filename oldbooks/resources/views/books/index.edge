@@ -12,7 +12,7 @@ All Authors
           <th>Title</th>
           <th>Condition</th>
           <th>Price</th>
-
+          <th></th>
         </tr>
         @each(book in books)
           <tr>
@@ -24,6 +24,9 @@ All Authors
             </td>
             <td>{{book.condition}}</td>
             <td>{{book.price/100}}</td>
+            <td>
+            <a class="btn btn-success" href="{{route('add_to_cart', {book_id:book.id})}}">Add to Cart</a>
+            </td>
           </tr>
         @endeach
       </table>
