@@ -38,4 +38,5 @@ Route.post('publishers/:publisher_id/update', 'PublisherController.processUpdate
 Route.get('publishers/:publisher_id/delete', 'PublisherController.delete').as('delete_publisher')
 Route.post('publishers/:publisher_id/delete', 'PublisherController.processDelete')
 
-Route.get('cloudinary/sign', 'CloudinaryController.sign').as('cloudinary_sign')
+Route.get('cloudinary/sign', 'CloudinaryController.sign')
+     .as('cloudinary_sign')
