@@ -39,6 +39,7 @@ class BookController {
     book.title = body.title;
     book.condition = body.condition;
     book.price = body.price;
+    book.image_url = body.image_url;
     await book.save();
     return response.route('BookController.index')
   }
