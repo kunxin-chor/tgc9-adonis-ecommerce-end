@@ -51,3 +51,8 @@ Route.post('cart/:book_id/update_quantity', 'CartController.updateQuantity').as(
 
 Route.get('checkout/', 'CheckoutController.checkout').as('checkout')
 Route.post('checkout/process', 'CheckoutController.processPayment')
+
+Route.post('api/user/login', 'api/LoginController.login');
+Route.post('api/user', 'api/LoginController.register');
+Route.get('api/user/profile', 'api/LoginController.profile')
+Route.get('api/user/protected', 'api/LoginController.protected').middleware(['auth:api'])
