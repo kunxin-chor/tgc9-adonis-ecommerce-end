@@ -1,6 +1,7 @@
 @layout('base')
 
 @section('content')
+<a class="btn btn-success mb-2" href="{{route('checkout') }}">Checkout</a>
 <a class="btn btn-danger mb-2" href="{{route('clear_cart') }}">Clear</a>
 <ul>
   @each(cartItem in cart)

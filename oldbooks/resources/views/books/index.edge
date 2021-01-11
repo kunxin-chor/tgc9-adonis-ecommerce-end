@@ -1,11 +1,31 @@
 @layout('base')
 
 @section('title')
-All Authors
+All Books
 @endsection
 
 @section('content')
       <h1>Old Books Needing New Home</h1>
+       <form method="GET">
+        <div class="form-row">
+          <div class="form-group col-4">
+            <label class="form-label">Title:</label>
+            <input type="text" class="form-control" name="title" value="{{oldValues.title ? oldValues.title : ""}}"/>
+          </div>
+          <div class="form-group col-4">
+            <label class="form-label">Max Price:</label>
+          <input type="text" class="form-control" name="maxPrice" value="{{oldValues.maxPrice ? oldValues.maxPrice : ""}}"/>
+          </div>
+          <div class="form-group col-4">
+            <label class="form-label">Min. Condition:</label>
+          <input type="text" class="form-control" name="condition" value="{{oldValues.condition ? oldValues.condition : ""}}"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <input type="submit" class="btn btn-primary mb-3" value="Search"/>
+        </div>
+
+    </form>
       <table class="table">
         <tr>
           <th>ID</th>

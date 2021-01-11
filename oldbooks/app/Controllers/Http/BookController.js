@@ -5,17 +5,36 @@ const Book = use('App/Models/Book')
 const Config = use('Config')
 
 class BookController {
-  async index({view}) {
+  async index({view, request}) {
+
+    let query = Book.query();
+    // retrieve search parameters from the query strings
+    let searchParams = request.get();
+
+    if (searchParams.title) {
+      query.where('title', 'like', '%' + searchParams.title + '%')
+    }
+
+    if (searchParams.maxPrice) {
+      query.where('price', '<=', searchParams.maxPrice)
+    }
+
+    if (searchParams.condition) {
+      query.where('condition', '>=', searchParams.condition)
+    }
+
     // select all the rows from the books table
-    let allBooks = await Book.all();
+    let allBooks = await query.fetch();
     return view.render('books/index', {
-      "books": allBooks.toJSON() // must convert to JSON
+      "books": allBooks.toJSON(), // must convert to JSON
+      "oldValues": request.get()
     })
   }
 
   async show({view, params}) {
     // extract out the book_id parameter from the URL
     let bookId = params.book_id;
+
     // select * from books where id = bookId
     let book = await Book.find(bookId);
     return view.render("books/show", {

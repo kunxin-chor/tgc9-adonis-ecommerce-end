@@ -1,0 +1,11 @@
+@layout('base')
+
+@section('scripts')
+<script src="https://js.stripe.com/v3"></script>
+<script>
+  let stripe = Stripe('{{publishableKey}}');
+  stripe.redirectToCheckout({
+    sessionId: '{{sessionId}}'
+  })
+</script>
+@endsection
