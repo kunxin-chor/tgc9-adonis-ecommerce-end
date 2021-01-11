@@ -51,7 +51,7 @@ class BookController {
     })
   }
 
-  async processCreate({request, response}) {
+  async processCreate({request, response, session}) {
     let body = request.post();
     console.log(body);
     let book = new Book();
@@ -59,6 +59,7 @@ class BookController {
     book.condition = body.condition;
     book.price = body.price;
     book.image_url = body.image_url;
+    session.flash({ notification: `${book.title} has been created` });
     await book.save();
     return response.route('BookController.index')
   }
