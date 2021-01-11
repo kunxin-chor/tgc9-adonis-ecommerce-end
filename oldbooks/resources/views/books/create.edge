@@ -6,20 +6,41 @@
     {{csrfField()}}
     <div>
         <label class="form-label">Title</label>
-        <input type="text" name="title" class="form-control"/>
+        <input type="text" name="title" value="{{old('title')}}" class="form-control
+        @if(hasErrorFor('title'))
+         is-invalid
+        @endif
+        "/>
+        {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('title'), hasErrorFor('title')) }}
     </div>
     <div>
         <label class="form-label">Condition</label>
-        <input type="number" name="condition" class="form-control"/>
+         <input type="number" value="{{old('condition')}}" name="condition" class="form-control
+        @if(hasErrorFor('condition'))
+          is-invalid
+        @endif
+        "/>
+        {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('condition'), hasErrorFor('condition')) }}
     </div>
     <div>
         <label class="form-label">Price</label>
-        <input type="number" name="price" class="form-control"/>
+        <input type="number" name="price" value="{{old('price')}}" class="form-control
+        @if(hasErrorFor('price'))
+           is-invalid
+        @endif
+        "/>
+        {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('price'), hasErrorFor('price')) }}
     </div>
-    <div>
+    <div class="
+      @if(hasErrorFor('image_url'))
+           is-invalid
+        @endif
+      "
+      >
       <a href='#' class="btn btn-primary" id="upload_widget">Upload Image</a>
-      <input type="hidden" name="image_url" id="image_url"/>
-      <img src="" id="uploaded_image" style="display:none"/>
+      <input type="hidden" name="image_url" id="image_url" value="{{old('image_url')}}"/>
+      <img src="" id="uploaded_image" style="display:none" value="{{old('image_url')}}"/>
+      {{ elIf('<div class="invalid-feedback" style="display:block">$self</div>', getErrorFor('image_url'), hasErrorFor('image_url')) }}
     </div>
     <input type="submit" value="Add" class="btn btn-primary mt-3"/>
 

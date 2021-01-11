@@ -3,9 +3,29 @@
 
 const Book = use('App/Models/Book')
 const Config = use('Config')
+const { validateAll } = use('Validator')
+
+const rules = {
+  title: 'required|max:254',
+  condition: 'required|integer|range:1,5',
+  price: 'required|integer|above:1',
+  image_url: 'required'
+}
+
+const messages = {
+  'title.required': 'Please provide a title',
+  'title.max': 'Please provide a shorter title',
+  'condition.range': 'Must be between 1 to 5',
+  'condition.required': 'Please provide a condition rating',
+  'condition.integer': 'Must be a whole number',
+  'price.required': 'Please provide a price',
+  'price.above': 'Price cannot be lower than 1',
+  'price.integer': 'Must be a whole number',
+  'image_url.required': 'Please provide an image'
+}
 
 class BookController {
-  async index({view, request}) {
+  async index({ view, request }) {
 
     let query = Book.query();
     // retrieve search parameters from the query strings
@@ -31,7 +51,7 @@ class BookController {
     })
   }
 
-  async show({view, params}) {
+  async show({ view, params }) {
     // extract out the book_id parameter from the URL
     let bookId = params.book_id;
 
@@ -42,18 +62,28 @@ class BookController {
     })
   }
 
-  create({view}) {
-    return view.render('books/create',{
+  create({ view }) {
+    return view.render('books/create', {
       cloudinaryName: Config.get('cloudinary.name'),
       cloudinaryPreset: Config.get('cloudinary.preset'),
       cloudinaryApiKey: Config.get('cloudinary.api_key'),
-      signUrl:'/cloudinary/sign'
+      signUrl: '/cloudinary/sign'
     })
   }
 
-  async processCreate({request, response, session}) {
+  async processCreate({ request, response, session }) {
+
     let body = request.post();
-    console.log(body);
+    const validation = await validateAll(body, rules, messages)
+
+    if (validation.fails()) {
+      session
+        .withErrors(validation.messages())
+        .flashExcept(['password'])
+
+      return response.redirect('back')
+    }
+
     let book = new Book();
     book.title = body.title;
     book.condition = body.condition;
