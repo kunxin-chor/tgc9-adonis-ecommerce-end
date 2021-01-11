@@ -21,6 +21,7 @@ Route.on('/').render('welcome')
 Route.get('books/', 'BookController.index').as('show_all_books')
 Route.get('books/create', 'BookController.create')
 Route.post('books/create', 'BookController.processCreate')
+Route.get('books/:book_id/update', 'BookController.update').as('update_book')
 Route.get('books/:book_id', 'BookController.show').as('show_book')
 
 

@@ -93,6 +93,36 @@ class BookController {
     await book.save();
     return response.route('BookController.index')
   }
+
+  async update({view, params}) {
+    let book = await Book.find(params.book_id);
+    return view.render('books/update',{
+      'book': book
+    })
+  }
+  async processUpdate({ request, response, session, params }) {
+
+    let body = request.post();
+    const validation = await validateAll(body, rules, messages)
+
+    if (validation.fails()) {
+      session
+        .withErrors(validation.messages())
+        .flashExcept(['password'])
+
+      return response.redirect('back')
+    }
+
+    let book = await Book.find(params.book_id)
+    book.title = body.title;
+    book.condition = body.condition;
+    book.price = body.price;
+    book.image_url = body.image_url;
+    session.flash({ notification: `${book.title} has been updated` });
+    await book.save();
+    return response.route('BookController.index')
+  }
+
 }
 
 module.exports = BookController
