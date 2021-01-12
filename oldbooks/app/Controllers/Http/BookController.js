@@ -5,11 +5,47 @@ const Book = use('App/Models/Book')
 const Config = use('Config')
 
 class BookController {
-  async index({view}) {
+
+   searchBooks(searchParams) {
+     // create a base query object
+    // eqv. to "SELECT * from books"
+    let query = Book.query()
+
+    // add in search critera for title if the user enters any title
+    if (searchParams.title) {
+      // if the user enters a search title, add the search for title to the query
+      // eqv. adding "WHERE title={searchParams.title}" to the back of "SELECT * from books"
+      query.where('title', 'like', '%' + searchParams.title + '%')
+    }
+
+    if (searchParams.condition) {
+      query.where('condition', '>=', searchParams.condition)
+    }
+
+    if (searchParams.min_price) {
+      query.where('price', '>=', searchParams.min_price)
+    }
+
+    if (searchParams.max_price) {
+      query.where('price', '<=', searchParams.max_price)
+    }
+
+    return query;
+  }
+
+  async index({view, request}) {
+    // extract out the search parameters
+    // we use `request.get()` because the form is submitted via the METHOD="GET"
+    let searchParams = request.get()
+
+    let query = this.searchBooks(searchParams);
+
+
     // select all the rows from the books table
-    let allBooks = await Book.all();
+   let allBooks = await query.fetch();
     return view.render('books/index', {
-      "books": allBooks.toJSON() // must convert to JSON
+      "books": allBooks.toJSON(), // must convert to JSON
+      "oldValues" : searchParams
     })
   }
 
