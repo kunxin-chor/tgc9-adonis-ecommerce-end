@@ -6,16 +6,23 @@
     {{csrfField()}}
     <div>
         <label class="form-label">Title</label>
-        <input type="text" name="title" class="form-control"/>
+        <input type="text" name="title" value="{{old('title')}}" class="form-control {{hasErrorFor('title') ? 'is-invalid': ''}}"/>
+        {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('title'), hasErrorFor('title'))}}
     </div>
     <div>
         <label class="form-label">Condition</label>
-        <input type="number" name="condition" class="form-control"/>
-    </div>
+        <input type="number" name="condition" value="{{old('condition')}}" class="form-control {{hasErrorFor('condition') ? 'is-invalid': ''}}"/>
+        @if(hasErrorFor('condition'))
+        <div class="invalid-feedback">{{getErrorFor('condition')}} </div>
+        @endif
+      </div>
     <div>
         <label class="form-label">Price</label>
-        <input type="number" name="price" class="form-control"/>
-    </div>
+        <input type="number" name="price" value="{{old('price')}}" class="form-control {{hasErrorFor('price') ? 'is-invalid' : ''}}"/>
+        @if(hasErrorFor('price'))
+        <div class="invalid-feedback">{{getErrorFor('price')}}</div>
+        @endif
+      </div>
     <div>
       <a href='#' class="btn btn-primary" id="upload_widget">Upload Image</a>
       <input type="hidden" name="image_url" id="image_url"/>

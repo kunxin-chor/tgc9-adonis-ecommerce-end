@@ -3,6 +3,7 @@
 
 const Book = use('App/Models/Book')
 const Config = use('Config')
+const {validateAll} = use('Validator')
 
 class BookController {
 
@@ -68,8 +69,45 @@ class BookController {
     })
   }
 
-  async processCreate({request, response}) {
+  async processCreate({request, response, session}) {
+
+    const rules = {
+      'title':'required|max:100',
+      'condition':'required|integer|range:1,5',
+      'price':'required|integer|above:0'
+    }
+
+    const messages = {
+      'title.required':"Please enter a title for the book",
+      'title.max':"Please enter a shorter title",
+      'condition.required':"Please enter a condition rating",
+      'condition.integer':"Please only enter whole numbers",
+      'condition.range':'Please enter only numbers from 1 to 5',
+      'price.required':"Please enter a price",
+      'price.integer':"Please enter an integer for price",
+      'price.above':'Price must be greater than 0'
+    }
+
+    // extract out the data in the form
     let body = request.post();
+
+    // validate the data inside the body variable
+    // 1st arg -- the data to validate
+    // 2nd arg -- the validation rules
+    // 3rd arg -- custome error messages
+    const validation = await validateAll(body, rules, messages);
+
+    if (validation.fails()) {
+      // store all the error messages inside the session
+      session.withErrors(validation.messages()).flashExcept([]);
+
+      console.log(validation.messages())
+
+      // go back to the previous page
+      return response.redirect('back')
+    }
+
+
     console.log(body);
     let book = new Book();
     book.title = body.title;
@@ -77,6 +115,10 @@ class BookController {
     book.price = body.price;
     book.image_url = body.image_url;
     await book.save();
+    // show a flash message to the user that we have successfully created a book
+    session.flash({
+      notification: `${book.title} has been created`
+    })
     return response.route('BookController.index')
   }
 }
