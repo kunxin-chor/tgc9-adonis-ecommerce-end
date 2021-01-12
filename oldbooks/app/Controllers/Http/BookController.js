@@ -3,10 +3,29 @@
 
 const Book = use('App/Models/Book')
 const Config = use('Config')
-const {validateAll} = use('Validator')
+const { validateAll } = use('Validator')
+
+const rules = {
+  'title': 'required|max:100',
+  'condition': 'required|integer|range:0,5',
+  'price': 'required|integer|above:0',
+  'image_url': 'required'
+}
+
+const messages = {
+  'title.required': "Please enter a title for the book",
+  'title.max': "Please enter a shorter title",
+  'condition.required': "Please enter a condition rating",
+  'condition.integer': "Please only enter whole numbers",
+  'condition.range': 'Please enter only numbers from 1 to 5',
+  'price.required': "Please enter a price",
+  'price.integer': "Please enter an integer for price",
+  'price.above': 'Price must be greater than 0',
+  'image_url.required': 'Please upload a book cover'
+}
 
 class BookController {
-  async index({view, request}) {
+  async index({ view, request }) {
 
     let query = Book.query();
     // retrieve search parameters from the query strings
@@ -32,7 +51,7 @@ class BookController {
     })
   }
 
-  async show({view, params}) {
+  async show({ view, params }) {
     // extract out the book_id parameter from the URL
     let bookId = params.book_id;
 
@@ -43,32 +62,34 @@ class BookController {
     })
   }
 
-  create({view}) {
-    return view.render('books/create',{
+  create({ view }) {
+    return view.render('books/create', {
       cloudinaryName: Config.get('cloudinary.name'),
       cloudinaryPreset: Config.get('cloudinary.preset'),
       cloudinaryApiKey: Config.get('cloudinary.api_key'),
-      signUrl:'/cloudinary/sign'
+      signUrl: '/cloudinary/sign'
     })
   }
 
-  async processCreate({request, response, session}) {
+  async processCreate({ request, response, session }) {
 
     const rules = {
-      'title':'required|max:100',
-      'condition':'required|integer|range:1,5',
-      'price':'required|integer|above:0'
+      'title': 'required|max:100',
+      'condition': 'required|integer|range:0,5',
+      'price': 'required|integer|above:0',
+      'image_url': 'required'
     }
 
     const messages = {
-      'title.required':"Please enter a title for the book",
-      'title.max':"Please enter a shorter title",
-      'condition.required':"Please enter a condition rating",
-      'condition.integer':"Please only enter whole numbers",
-      'condition.range':'Please enter only numbers from 1 to 5',
-      'price.required':"Please enter a price",
-      'price.integer':"Please enter an integer for price",
-      'price.above':'Price must be greater than 0'
+      'title.required': "Please enter a title for the book",
+      'title.max': "Please enter a shorter title",
+      'condition.required': "Please enter a condition rating",
+      'condition.integer': "Please only enter whole numbers",
+      'condition.range': 'Please enter only numbers from 1 to 5',
+      'price.required': "Please enter a price",
+      'price.integer': "Please enter an integer for price",
+      'price.above': 'Price must be greater than 0',
+      'image_url.required': 'Please upload a book cover'
     }
 
     // extract out the data in the form
@@ -101,6 +122,53 @@ class BookController {
     // show a flash message to the user that we have successfully created a book
     session.flash({
       notification: `${book.title} has been created`
+    })
+    return response.route('BookController.index')
+  }
+
+  async update({ request, view, params }) {
+    let bookId = params.book_id;
+    let book = await Book.find(bookId);
+    return view.render('books/update', {
+      book: book.toJSON(),
+      cloudinaryName: Config.get('cloudinary.name'),
+      cloudinaryPreset: Config.get('cloudinary.preset'),
+      cloudinaryApiKey: Config.get('cloudinary.api_key'),
+      signUrl: '/cloudinary/sign'
+    })
+  }
+
+  async processUpdate({ request, response, params, session }) {
+    let book_id = params.book_id;
+    let book = await Book.find(book_id)
+
+    // extract out the data in the form
+    let body = request.post();
+
+    // validate the data inside the body variable
+    // 1st arg -- the data to validate
+    // 2nd arg -- the validation rules
+    // 3rd arg -- custome error messages
+    const validation = await validateAll(body, rules, messages);
+
+    if (validation.fails()) {
+      // store all the error messages inside the session
+      session.withErrors(validation.messages()).flashExcept([]);
+
+      console.log(validation.messages())
+
+      // go back to the previous page
+      return response.redirect('back')
+    }
+
+    book.title = body.title;
+    book.condition = body.condition;
+    book.price = body.price;
+    book.image_url = body.image_url;
+    await book.save();
+    // show a flash message to the user that we have successfully created a book
+    session.flash({
+      notification: `${book.title} has been updated`
     })
     return response.route('BookController.index')
   }

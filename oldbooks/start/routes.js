@@ -22,7 +22,8 @@ Route.get('books/', 'BookController.index').as('show_all_books')
 Route.get('books/create', 'BookController.create')
 Route.post('books/create', 'BookController.processCreate')
 Route.get('books/:book_id', 'BookController.show').as('show_book')
-
+Route.get('books/:book_id/update', 'BookController.update').as('edit_book')
+Route.post('books/:book_id/update', 'BookController.processUpdate')
 
 Route.get('authors/', 'AuthorController.index').as('show_all_authors')
 Route.get('authors/create', 'AuthorController.create')
@@ -50,3 +51,8 @@ Route.post('cart/:book_id/update_quantity', 'CartController.updateQuantity').as(
 
 Route.get('checkout/', 'CheckoutController.checkout').as('checkout')
 Route.post('checkout/process', 'CheckoutController.processPayment')
+
+Route.post('api/user/register', 'api/LoginController.register')
+Route.post('api/user/login', 'api/LoginController.login')
+Route.get('api/user/profile', 'api/LoginController.profile')
+Route.get('api/user/protected', 'api/LoginController.protected').middleware(['auth:api'])

@@ -134,7 +134,7 @@ module.exports = {
   csrf: {
     enable: true,
     methods: ['POST', 'PUT', 'DELETE'],
-    filterUris: ['checkout/process', '/checkout/process'],
+    filterUris: ['checkout/process', '/checkout/process', '/api/(.*)'],
     cookieOptions: {
       httpOnly: false,
       sameSite: true,

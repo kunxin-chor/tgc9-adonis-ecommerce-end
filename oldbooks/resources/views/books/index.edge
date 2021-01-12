@@ -6,7 +6,6 @@ All Books
 
 @section('content')
       <h1>Old Books Needing New Home</h1>
-<<<<<<< HEAD
        <form method="GET">
         <div class="form-row">
           <div class="form-group col-4">
@@ -27,36 +26,6 @@ All Books
         </div>
 
     </form>
-=======
-      <form method="GET" class="mb-3">
-        <div class="form-row">
-          <!-- search by title -->
-          <div class="form-group col-md-6 col-12">
-            <label class="form-label">Title</label>
-          <input type="text" class="form-control" name="title" value="{{oldValues.title ? oldValues.title : ""}}" />
-          </div>
-
-          <!-- search by condition -->
-          <div class="form-group col-md col-12">
-            <label class="form-label">Min. Condition</label>
-            <input type="text" class="form-control" name="condition" value="{{oldValues.condition ? oldValues.condition : ""}}" />
-          </div>
-
-          <!-- search by min price -->
-          <div class="form-group col-md col-12">
-            <label class="form-label">Min. Price</label>
-            <input type="number" class="form-control" name="min_price" value="{{oldValues.min_price ? oldValues.min_price : ""}}"/>
-          </div>
-
-          <!-- search by max price -->
-          <div class="form-group col-md col-12">
-            <label class="form-label">Max. Price</label>
-          <input type="number" class="form-control" name="max_price" value="{{oldValues.max_price ? oldValues.max_price : ""}}"/>
-          </div>
-        </div>
-        <input type="submit" class="btn btn-primary" value="Search"/>
-      </form>
->>>>>>> 06-validation-demo
       <table class="table">
         <tr>
           <th>ID</th>

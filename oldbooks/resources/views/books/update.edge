@@ -1,0 +1,10 @@
+@layout('base')
+
+@section('content')
+<h1>Editing {{book.title}}</h1>
+<form method="POST">
+  {{ csrfField() }}
+  @include('books.book_form')
+  <input type="submit" class="btn btn-primary" value="Update"/>
+</form>
+@endsection
