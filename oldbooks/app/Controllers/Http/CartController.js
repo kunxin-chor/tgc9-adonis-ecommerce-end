@@ -57,6 +57,14 @@ class CartController {
     let cart = session.get(CART_KEY, {});
     if (cart.hasOwnProperty(params.book_id)){
       let newQuantity = request.post().newQty;
+
+      if (newQuantity <= 0) {
+        session.flash({
+          errors: "Cannot change quantity to 0 or less"
+        })
+        return response.route('show_cart');
+      }
+
       cart[params.book_id].qty = newQuantity;
       session.put(CART_KEY, cart);
     }

@@ -35,6 +35,23 @@
   </ul>
 
 </nav>
+
+  @if(flashMessage('notification'))
+  <div class="alert alert-success">{{ flashMessage('notification')}}</div>
+  @endif
+
+  @if(flashMessage('warnings'))
+  <div class="alert alert-danger">
+    <ul>
+      @each(error in flashMessage('warnings'))
+      <li>{{error.message}}</li>
+      @endeach
+    </ul>
+
+
+  </div>
+  @endif
+
     <div class="container">
         @section("content")
         @endsection
