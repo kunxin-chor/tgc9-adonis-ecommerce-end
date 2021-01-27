@@ -2,14 +2,24 @@
 
 const CART_KEY = 'cart'
 const Book = use('App/Models/Book')
+const User = use('App/Models/User')
 
 class CartController {
-  async addToCart({ params, session }) {
+  async addToCart({ params, session, response, auth }) {
     // imagine a user session to be a dictionary
     // The first arugment in session.get is the key. The second argument
     // is what to return if the key is not found in user session i.e default
-    let cart = session.get(CART_KEY, {});
+    let cart = session.get(CART_KEY,null);
 
+    // if the shopping cart is not found in session, we use the database version
+    if (!cart) {
+      // make sure there is cart saved in the user's row
+      if (auth.user.cart_content) {
+        cart = JSON.parse(auth.user.cart_content);
+      } else {
+        cart = {};
+      }
+    }
     // retrieve the book that the user wants to add cart
     let book = await Book.find(params.book_id);
 
@@ -25,9 +35,13 @@ class CartController {
       }
     }
 
-
     // put the cart object into the session under the key specified in the first argument
     session.put(CART_KEY, cart);
+    auth.user.cart_content = JSON.stringify(cart);
+    auth.user.save();
+
+    // auth.user will contain the model of the currently logged in user
+    response.route('show_all_books')
 
   }
 

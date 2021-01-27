@@ -52,6 +52,12 @@ Route.post('cart/:book_id/update_quantity', 'CartController.updateQuantity').as(
 Route.get('checkout/', 'CheckoutController.checkout').as('checkout')
 Route.post('checkout/process', 'CheckoutController.processPayment')
 
+Route.get('/users/register', 'UserController.register')
+Route.post('/users/register', 'UserController.processRegister')
+Route.get('/users/login', 'UserController.login');
+Route.post('/users/login', 'UserController.processLogin');
+Route.get('/users/show', 'UserController.show')
+
 Route.post('api/user/login', 'api/LoginController.login');
 Route.post('api/user', 'api/LoginController.register');
 Route.get('api/user/profile', 'api/LoginController.profile')
