@@ -4,7 +4,7 @@ const CART_KEY = 'cart'
 const Book = use('App/Models/Book')
 
 class CartController {
-  async addToCart({ params, session }) {
+  async addToCart({ params, session, response }) {
     // imagine a user session to be a dictionary
     // The first arugment in session.get is the key. The second argument
     // is what to return if the key is not found in user session i.e default
@@ -28,6 +28,7 @@ class CartController {
 
     // put the cart object into the session under the key specified in the first argument
     session.put(CART_KEY, cart);
+     response.route('show_all_books')
 
   }
 
