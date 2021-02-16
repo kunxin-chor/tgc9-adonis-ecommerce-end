@@ -5,7 +5,7 @@ const Schema = use('Schema')
 
 class BooksSchema extends Schema {
   up () {
-    this.table('books', (table) => {b
+    this.table('books', (table) => {
       // alter table
       table.string('image_url', 254)
     })
