@@ -5,10 +5,33 @@ const Config = use('Config')
 const Stripe = use('stripe')(Config.get('stripe.secret_key'))
 const CART_KEY = 'cart'
 
+const getCartFromUser = async (session, auth) => {
+
+  let cart = session.get(CART_KEY, {});
+  let user = null;
+  try {
+    user = await auth.getUser();
+  } catch {
+    user = null;
+  }
+
+  // if cart is null, get from user instead
+  try {
+    if (Object.keys(cart).length == 0 && user && user.cart_content) {
+      cart = JSON.parse(user.cart_content);
+    }
+  }
+  catch {
+    cart = {};
+  }
+  return cart;
+}
+
+
 class CheckoutController {
-  async checkout({response, session, view}) {
+  async checkout({response, session, view, auth}) {
      // 1. create line items (i.e what the user is paying for)
-     let cart = session.get(CART_KEY, {})
+     let cart = await getCartFromUser(session, auth);
 
      // ...convert the cart from object to an array
      let cartArray = Object.values(cart);

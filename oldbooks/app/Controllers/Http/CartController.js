@@ -81,7 +81,7 @@ class CartController {
   }
 
   async clear({ session, response, auth }) {
-    session.clear(CART_KEY);
+    session.forget(CART_KEY);
     try {
       let user = await auth.getUser();
       user.cart_content = "";

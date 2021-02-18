@@ -58,6 +58,17 @@ Route.post('api/user/register', 'api/LoginController.register');
 Route.get('api/user/profile', 'api/LoginController.profile')
 Route.get('api/user/protected', 'api/LoginController.protected').middleware(['auth:api'])
 
+// Login via Token
+Route.get('api/loginWithToken', 'LoginWithTokenController.login')
+
 // Cart
 Route.put('api/cart', 'api/CartController.updateCart').middleware(['auth:api'])
 Route.get('api/cart', 'api/CartController.getCart').middleware(['auth:api'])
+
+// Session based user authentication
+Route.get('/users/register', 'UserController.register')
+Route.post('/users/register', 'UserController.processRegister')
+Route.get('/users/login', 'UserController.login');
+Route.post('/users/login', 'UserController.processLogin');
+Route.get('/users/show', 'UserController.show')
+Route.get('/users/logout', 'UserController.logout')
