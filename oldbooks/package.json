@@ -28,7 +28,7 @@
     "@adonisjs/shield": "^1.0.8",
     "@adonisjs/validator": "^5.0.6",
     "adonis-4-cloudinary": "^1.0.2",
-    "sqlite3": "^5.0.0",
+    "sqlite3": "^5.0.3",
     "stripe": "^8.130.0"
   },
   "devDependencies": {},
